@@ -4,5 +4,8 @@ client = MongoClient("mongodb://127.0.0.1")
 
 db = client['budget_management_DB']
 
-users = db['users']
-operations = db['operations']
+usersDB = db['users']
+operationsDB = db['operations']
+
+
+# usersDB.delete_many({"age":0})

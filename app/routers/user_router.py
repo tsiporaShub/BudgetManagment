@@ -16,6 +16,6 @@ async def login(userDetails: UserDetails):
     return user_service.login(userDetails)
 
 
-@user_router.put("/updateDetails")
-async def updateDetails(user: User):
-    return user_service.updateDetails(user)
+@user_router.put("/updateDetails/{user_id}")
+async def updateDetails(user_id, user: User):
+    return user_service.updateDetails(user_id, user)
