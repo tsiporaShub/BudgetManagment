@@ -4,12 +4,15 @@ from app.models.user_model import User
 from app.models.userDetails_model import UserDetails
 
 
-def signup(user: User):
+async def signup(user: User):
     """
     A function to add new user to the users collection in the DB
     :param user:a user to insert
     :return:the new user when the add was successful
     """
+    u = usersDB.find_one(UserDetails(name=user.name, password=user.password).__dict__)
+    if u is not None:
+        raise HTTPException(status_code=409, detail='The user is exist')
     users = list(usersDB.find())
     if len(users) == 0:
         user.id = 0
@@ -19,7 +22,7 @@ def signup(user: User):
     return user
 
 
-def login(userDetails: UserDetails):
+async def login(userDetails: UserDetails):
     """
     A function to check if the user who wants to connect exists according to the received details
     :param userDetails:username and his password
@@ -31,7 +34,7 @@ def login(userDetails: UserDetails):
     return user['id']
 
 
-def updateDetails(user_id, user: User):
+async def updateDetails(user_id, user: User):
     """
     A function for editing user information
     :param user_id:the id of the user
