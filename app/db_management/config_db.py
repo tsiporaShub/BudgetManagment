@@ -6,6 +6,3 @@ db = client['budget_management_DB']
 
 usersDB = db['users']
 operationsDB = db['operations']
-
-
-# usersDB.delete_many({"age":0})

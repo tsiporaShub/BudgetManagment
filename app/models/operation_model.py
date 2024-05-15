@@ -1,10 +1,15 @@
-from enum import Enum
 from pydantic import BaseModel
+from enum import IntEnum
 
-OperationType = Enum('OperationType', ['REVENUE', 'SPENDING'])
+
+class OperationType(IntEnum):
+    REVENUE = 1
+    SPENDING = 2
 
 
 class Operation(BaseModel):
+    id: int
+    userId: int
     type: OperationType
     description: str
     count: int
