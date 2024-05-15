@@ -11,6 +11,8 @@ async def get_balance(userId):
     :param userId: the id of the user
     :return: the balance amount
     """
+    if not await is_exist(userId):
+        raise HTTPException(status_code=404, detail='The user is not exist')
     sum_revenues = sum(r['amount'] for r in await get_all_user_revenues(userId))
     sum_spending = sum(s['amount'] for s in await get_all_user_spending(userId))
     return sum_revenues - sum_spending
@@ -22,6 +24,8 @@ async def get_all_user_revenues(userId):
     :param userId: the id of the user
     :return: a list of all the user's revenues
     """
+    if not await is_exist(userId):
+        raise HTTPException(status_code=404, detail='The user is not exist')
     revenues = list(operationsDB.find({'userId': int(userId), 'type': OperationType.REVENUE}))
     [r.pop('_id') for r in revenues]
     return revenues
@@ -33,6 +37,8 @@ async def get_all_user_spending(userId):
     :param userId: the id of the user
     :return: a list of all the user's spending
     """
+    if not await is_exist(userId):
+        raise HTTPException(status_code=404, detail='The user is not exist')
     spending = list(operationsDB.find({'userId': int(userId), 'type': OperationType.SPENDING}))
     [s.pop('_id') for s in spending]
     return spending
