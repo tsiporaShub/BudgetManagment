@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, conint
 from enum import IntEnum
 
 
@@ -12,5 +12,5 @@ class Operation(BaseModel):
     userId: int
     type: OperationType
     description: str
-    count: int
+    amount: conint(gt=0)
     date: str
