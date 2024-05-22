@@ -6,6 +6,9 @@ logging.basicConfig(filename='utils/server.log', level=logging.INFO, format='%(a
 
 
 def log_request(func):
+    """
+    A decorator that logs to a file for each server call
+    """
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
         request: Request = kwargs['request']
