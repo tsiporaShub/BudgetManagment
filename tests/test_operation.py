@@ -13,18 +13,18 @@ def test_add_operation():
         "amount": 20000,
         "date": "15/05/2024"
     }
-    response = requests.post(BASE_URL + "/add", data=json.dumps(data))
+    response = requests.post(BASE_URL , data=json.dumps(data))
     assert response.status_code == 200
     data["userId"] = 100
-    response = requests.post(BASE_URL + "/add", data=json.dumps(data))
+    response = requests.post(BASE_URL , data=json.dumps(data))
     assert response.status_code == 404
     data["userId"] = 0
     data["amount"] = '-500'
-    response = requests.post(BASE_URL + "/add", data=json.dumps(data))
+    response = requests.post(BASE_URL , data=json.dumps(data))
     assert response.status_code == 422
     data["amount"] = '20000'
     data["type"] = 9
-    response = requests.post(BASE_URL + "/add", data=json.dumps(data))
+    response = requests.post(BASE_URL , data=json.dumps(data))
     assert response.status_code == 422
 
 
@@ -38,26 +38,26 @@ def test_update_operation():
         "amount": 30000,
         "date": "15/05/2024"
     }
-    response = requests.put(BASE_URL + f"/update/{operationId}", data=json.dumps(data))
+    response = requests.put(BASE_URL + f"/{operationId}", data=json.dumps(data))
     assert response.status_code == 200
     operationId = 100
-    response = requests.put(BASE_URL + f"/update/{operationId}", data=json.dumps(data))
+    response = requests.put(BASE_URL + f"/{operationId}", data=json.dumps(data))
     assert response.status_code == 404
 
 
 def test_get_balance():
     userId = 0
-    response = requests.get(BASE_URL + f"/getBalance/{userId}")
+    response = requests.get(BASE_URL + f"/balance/{userId}")
     assert response.status_code == 200
     assert response.json() == 30000
     userId = 100
-    response = requests.get(BASE_URL + f"/getBalance/{userId}")
+    response = requests.get(BASE_URL + f"/balance/{userId}")
     assert response.status_code == 404
 
 
 def test_get_all_user_revenues():
     userId = 0
-    response = requests.get(BASE_URL + f"/getAllRevenues/{userId}")
+    response = requests.get(BASE_URL + f"/revenues/{userId}")
     assert response.status_code == 200
     assert response.json() == [
         {
@@ -70,24 +70,24 @@ def test_get_all_user_revenues():
         }
     ]
     userId = 100
-    response = requests.get(BASE_URL + f"/getAllRevenues/{userId}")
+    response = requests.get(BASE_URL + f"/revenues/{userId}")
     assert response.status_code == 404
 
 
 def test_get_all_user_spending():
     userId = 0
-    response = requests.get(BASE_URL + f"/getAllSpending/{userId}")
+    response = requests.get(BASE_URL + f"/spending/{userId}")
     assert response.status_code == 200
     assert response.json() == []
     userId = 100
-    response = requests.get(BASE_URL + f"/getAllSpending/{userId}")
+    response = requests.get(BASE_URL + f"/spending/{userId}")
     assert response.status_code == 404
 
 
 def test_delete_operation():
     operationId = 0
-    response = requests.delete(BASE_URL + f"/delete/{operationId}")
+    response = requests.delete(BASE_URL + f"/{operationId}")
     assert response.status_code == 200
     operationId = 100
-    response = requests.delete(BASE_URL + f"/delete/{operationId}")
+    response = requests.delete(BASE_URL + f"/{operationId}")
     assert response.status_code == 404

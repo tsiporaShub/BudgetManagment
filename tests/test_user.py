@@ -59,12 +59,12 @@ def test_updateDetails():
         "age": 20,
         "city": "Jerusalem"
     }
-    response = requests.put(BASE_URL + f"/updateDetails/{userId}", data=json.dumps(data))
+    response = requests.put(BASE_URL + f"/{userId}", data=json.dumps(data))
     assert response.status_code == 200
     userId = -100
-    response = requests.put(BASE_URL + f"/updateDetails/{userId}", data=json.dumps(data))
+    response = requests.put(BASE_URL + f"/{userId}", data=json.dumps(data))
     assert response.status_code == 404
     userId = 0
     data["email"] = '101010.com'
-    response = requests.put(BASE_URL + f"/updateDetails/{userId}", data=json.dumps(data))
+    response = requests.put(BASE_URL + f"/{userId}", data=json.dumps(data))
     assert response.status_code == 422
