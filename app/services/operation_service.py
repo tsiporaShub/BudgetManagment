@@ -5,41 +5,41 @@ from app.models.operation_model import Operation, OperationType
 from app.services.user_service import is_exist
 
 
-async def get_balance(userId):
+async def get_balance(user_id):
     """
     A function to get the account balance of the user
-    :param userId: the id of the user
+    :param user_id: the id of the user
     :return: the balance amount
     """
-    if not await is_exist(userId):
+    if not await is_exist(user_id):
         raise HTTPException(status_code=404, detail='The user is not exist')
-    sum_revenues = sum(r['amount'] for r in await get_all_user_revenues(userId))
-    sum_spending = sum(s['amount'] for s in await get_all_user_spending(userId))
+    sum_revenues = sum(r['amount'] for r in await get_all_user_revenues(user_id))
+    sum_spending = sum(s['amount'] for s in await get_all_user_spending(user_id))
     return sum_revenues - sum_spending
 
 
-async def get_all_user_revenues(userId):
+async def get_all_user_revenues(user_id):
     """
     A function to get all the user revenues
-    :param userId: the id of the user
+    :param user_id: the id of the user
     :return: a list of all the user's revenues
     """
-    if not await is_exist(userId):
+    if not await is_exist(user_id):
         raise HTTPException(status_code=404, detail='The user is not exist')
-    revenues = list(operationsDB.find({'userId': int(userId), 'type': OperationType.REVENUE}))
+    revenues = list(operationsDB.find({'user_id': int(user_id), 'type': OperationType.REVENUE}))
     [r.pop('_id') for r in revenues]
     return revenues
 
 
-async def get_all_user_spending(userId):
+async def get_all_user_spending(user_id):
     """
     A function to get all the user spending
-    :param userId: the id of the user
+    :param user_id: the id of the user
     :return: a list of all the user's spending
     """
-    if not await is_exist(userId):
+    if not await is_exist(user_id):
         raise HTTPException(status_code=404, detail='The user is not exist')
-    spending = list(operationsDB.find({'userId': int(userId), 'type': OperationType.SPENDING}))
+    spending = list(operationsDB.find({'user_id': int(user_id), 'type': OperationType.SPENDING}))
     [s.pop('_id') for s in spending]
     return spending
 
@@ -50,7 +50,7 @@ async def add_operation(operation: Operation):
     :param operation: a operation to insert
     :return: the new operation when the add was successful
     """
-    if not await is_exist(operation.userId):
+    if not await is_exist(operation.user_id):
         raise HTTPException(status_code=404, detail='The user is not exist')
     operations = list(operationsDB.find())
     if len(operations) == 0:
@@ -61,27 +61,27 @@ async def add_operation(operation: Operation):
     return operation
 
 
-async def update_operation(operationId, operation: Operation):
+async def update_operation(operation_id, operation: Operation):
     """
     A function to edit operation information
-    :param operationId: the id of the operation
+    :param operation_id: the id of the operation
     :param operation: the new details of the operation
     :return: the updated operation
     """
-    if operationsDB.find_one({"id": int(operationId)}) is None:
+    if operationsDB.find_one({"id": int(operation_id)}) is None:
         raise HTTPException(status_code=404, detail='The operation is not exist')
-    operationsDB.update_one({"id": int(operationId)},
+    operationsDB.update_one({"id": int(operation_id)},
                             {"$set": {'description': operation.description, 'amount': operation.amount}})
     return "Editing of the description and amount was successful"
 
 
-async def delete_operation(operationId):
+async def delete_operation(operation_id):
     """
     A function to delete operation from the collection in the DB
-    :param operationId: the id of the operation
+    :param operation_id: the id of the operation
     :return: a message if the deletion was successful
     """
-    if operationsDB.find_one({"id": int(operationId)}) is None:
+    if operationsDB.find_one({"id": int(operation_id)}) is None:
         raise HTTPException(status_code=404, detail='The operation is not exist')
-    operationsDB.delete_one({"id": int(operationId)})
-    return "Delete operation "+operationId+" passed successfully"
+    operationsDB.delete_one({"id": int(operation_id)})
+    return "Delete operation " + operation_id + " passed successfully"

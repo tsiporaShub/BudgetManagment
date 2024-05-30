@@ -9,7 +9,7 @@ class OperationType(IntEnum):
 
 class Operation(BaseModel):
     id: int
-    userId: int
+    user_id: int
     type: OperationType
     description: str
     amount: conint(gt=0)

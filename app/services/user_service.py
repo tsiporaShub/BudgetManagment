@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from app.db_management.config_db import usersDB
 from app.models.user_model import User
-from app.models.userDetails_model import UserDetails
+from app.models.user_details_model import UserDetails
 
 
 async def signup(user: User):
@@ -22,19 +22,19 @@ async def signup(user: User):
     return user
 
 
-async def login(userDetails: UserDetails):
+async def login(user_details: UserDetails):
     """
     A function to check if the user who wants to connect exists according to the received details
-    :param userDetails: username and his password
+    :param user_details: username and his password
     :return: user id if the user exist
     """
-    user = usersDB.find_one(userDetails.__dict__)
+    user = usersDB.find_one(user_details.__dict__)
     if user is None:
         raise HTTPException(status_code=404, detail='The user is not exist')
     return user['id']
 
 
-async def updateDetails(user_id, user: User):
+async def update_details(user_id, user: User):
     """
     A function for editing user information
     :param user_id: the id of the user
@@ -64,6 +64,7 @@ async def get_all_users():
     A function to get all the users
     :return: a list of all the users
     """
-    users = usersDB.find()
-    return list(users)
+    users = list(usersDB.find())
+    [u.pop('_id') for u in users]
+    return users
 

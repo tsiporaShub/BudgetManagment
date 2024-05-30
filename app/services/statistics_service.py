@@ -10,7 +10,6 @@ async def get_users_balance():
     :return: A picture of the graph
     """
     users = await user_service.get_all_users()
-    [u.pop('_id') for u in users]
     users_names = []
     users_balance = []
     for u in users:
